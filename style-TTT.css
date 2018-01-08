@@ -20,6 +20,20 @@ button {
     font-size: 18px;
 }
 
+#setup {
+    margin: 20px;
+}
+
+#xButton {
+    margin: 10px;
+    color: orange;
+}
+
+#oButton {
+    margin: 10px;
+    color: green;
+}
+
 .wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
