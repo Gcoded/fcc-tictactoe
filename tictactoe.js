@@ -1,5 +1,9 @@
 
-var playerChoice = '';
+var playerMarker = '';
+var cpuMarker = '';
+var playerTurn = true;
+var boxSelected = '';
+
 
 $("#startBtn").click(function(event) {
     runSetup();
@@ -13,12 +17,32 @@ function runSetup() {
 
     $("#setup").click(function(event) {
         if (event.target.id === "xButton") {
-            playerChoice = 'X';
-            $('#setup').text('You have selected '+playerChoice+', lets begin!');
+            playerMarker = 'X';
+            cpuMarker = 'O';
+            $('#setup').text('You have selected '+playerMarker+', lets begin!');
         }
         if (event.target.id === 'oButton') {
-            playerChoice = 'O';
-            $('#setup').text('You have selected '+playerChoice+', lets begin!');
+            playerMarker = 'O';
+            cpuMarker = 'X';
+            $('#setup').text('You have selected '+playerMarker+', lets begin!');
         }
     });
+}
+
+$(".wrapper").click(function(event) {
+    var boxSelected = event.target.id;
+})
+
+function gamePlay() {
+    if (playerTurn) {
+        $(boxSelected).text(playerMarker);
+    }
+    else {
+        cpuMove();
+    }
+
+}
+
+function cpuMove() {
+
 }
