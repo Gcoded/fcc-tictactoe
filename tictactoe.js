@@ -4,6 +4,8 @@ var cpuMarker = '';
 var gameStarted = false;
 var playerTurn = true;
 var boxSelected = '';
+var playerMarkCSS = '';
+var cpuMarkCSS = '';
 
 
 $("#startBtn").click(function(event) {
@@ -22,11 +24,15 @@ function runSetup() {
     $(".marker").click(function(event) {
         if (event.target.id === "xButton") {
             playerMarker = 'X';
+            playerMarkCSS = 'xMarker';
             cpuMarker = 'O';
+            cpuMarkCSS = 'oMarker';
         }
         if (event.target.id === 'oButton') {
             playerMarker = 'O';
+            playerMarkCSS = 'oMarker';
             cpuMarker = 'X';
+            cpuMarkCSS = 'xMarker';
         }
         $('#setup').text('You have selected '+playerMarker+', lets begin!');
         var timer = setTimeout(function() {
@@ -39,11 +45,13 @@ $(".box").click(function(event) {
     if (gameStarted) {
         if (playerTurn) {
             boxSelected = event.target.id;
+            $('#'+boxSelected).addClass(playerMarkCSS);
             $('#'+boxSelected).text(playerMarker);
             playerTurn = !playerTurn;
         }
         var cpuMoveTimer = setTimeout(function() {
             boxSelected = cpuMove();
+            $('#'+boxSelected).addClass(cpuMarkCSS);
             $('#'+boxSelected).text(cpuMarker);
             playerTurn = !playerTurn;
         }, 1000);

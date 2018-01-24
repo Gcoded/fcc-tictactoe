@@ -32,10 +32,18 @@ button {
     background-color: none;
 }
 
+.xMarker {
+    color: red;
+}
+
 #oButton {
     color: green;
     border: none;
     background-color: none;
+}
+
+.oMarker {
+    color: green;
 }
 
 .wrapper {
