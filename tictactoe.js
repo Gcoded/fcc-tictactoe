@@ -13,10 +13,11 @@ $("#startBtn").click(function(event) {
 });
 
 function runSetup() {
-    $('#setup').text('Choose your mark: ');
+    gameStarted = true;
     var xButton = $('<button class="marker" id="xButton"></button>').text('X');
     var oButton = $('<button class="marker" id="oButton"></button>').text('O');
     $('#setup').append(xButton, oButton);
+    $('#setup').css('visibility', 'visible');
 
     $(".marker").click(function(event) {
         if (event.target.id === "xButton") {
@@ -28,7 +29,9 @@ function runSetup() {
             cpuMarker = 'X';
         }
         $('#setup').text('You have selected '+playerMarker+', lets begin!');
-        gameStarted = true;
+        var timer = setTimeout(function() {
+            $('#setup').css('visibility', 'hidden');
+        }, 3000);
     });
 }
 
