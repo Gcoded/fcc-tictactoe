@@ -42,22 +42,22 @@ $(".box").click(function(event) {
             $('#'+boxSelected).text(playerMarker);
             playerTurn = !playerTurn;
         }
-
-        boxSelected = cpuMove();
-        $('#'+boxSelected).text(cpuMarker);
-        playerTurn = !playerTurn;
+        var cpuMoveTimer = setTimeout(function() {
+            boxSelected = cpuMove();
+            $('#'+boxSelected).text(cpuMarker);
+            playerTurn = !playerTurn;
+        }, 1000);
     }
 });
 
 function cpuMove() {
     var totalBoxes = 9;
     var availableBoxes = [];
-    for (var i = 0; i < totalBoxes.length; i++) {
+    for (var i = 1; i < totalBoxes+1; i++) {
         if ($('#box'+ i).text() === '') {
             availableBoxes.push('box'+i);
         }
     }
-
     return availableBoxes[0];
 }
 
