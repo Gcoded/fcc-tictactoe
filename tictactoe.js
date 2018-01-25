@@ -3,6 +3,7 @@ var playerMarker = '';
 var cpuMarker = '';
 var gameStarted = false;
 var playerTurn = true;
+var cpuTurn = false;
 var boxSelected = '';
 var playerMarkCSS = '';
 var cpuMarkCSS = '';
@@ -45,16 +46,22 @@ $(".box").click(function(event) {
     if (gameStarted) {
         if (playerTurn) {
             boxSelected = event.target.id;
-            $('#'+boxSelected).addClass(playerMarkCSS);
-            $('#'+boxSelected).text(playerMarker);
-            playerTurn = !playerTurn;
+            if ($('#'+boxSelected).text() === '') {
+                $('#'+boxSelected).addClass(playerMarkCSS);
+                $('#'+boxSelected).text(playerMarker);
+                playerTurn = !playerTurn;
+                cpuTurn = !cpuTurn;
+            }
         }
-        var cpuMoveTimer = setTimeout(function() {
-            boxSelected = cpuMove();
-            $('#'+boxSelected).addClass(cpuMarkCSS);
-            $('#'+boxSelected).text(cpuMarker);
-            playerTurn = !playerTurn;
-        }, 1000);
+        if (cpuTurn) {
+            var cpuMoveTimer = setTimeout(function() {
+                boxSelected = cpuMove();
+                $('#'+boxSelected).addClass(cpuMarkCSS);
+                $('#'+boxSelected).text(cpuMarker);
+                cpuTurn = !cpuTurn;
+                playerTurn = !playerTurn;
+            }, 1000);
+        }
     }
 });
 
