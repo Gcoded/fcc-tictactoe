@@ -49,6 +49,7 @@ $(".box").click(function(event) {
             if ($('#'+boxSelected).text() === '') {
                 $('#'+boxSelected).addClass(playerMarkCSS);
                 $('#'+boxSelected).text(playerMarker);
+                checkForWinner();
                 playerTurn = !playerTurn;
                 cpuTurn = !cpuTurn;
             }
@@ -58,6 +59,7 @@ $(".box").click(function(event) {
                 boxSelected = cpuMove();
                 $('#'+boxSelected).addClass(cpuMarkCSS);
                 $('#'+boxSelected).text(cpuMarker);
+                checkForWinner();
                 cpuTurn = !cpuTurn;
                 playerTurn = !playerTurn;
             }, 1000);
@@ -74,5 +76,26 @@ function cpuMove() {
         }
     }
     return availableBoxes[0];
+}
+
+function checkForWinner() {
+    var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
+        [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
+
+    var markedBoxes = [];
+    for (var i = 0; i < 9; i++) {
+        if ($('#box'+ i).text() !== '') {
+            markedBoxes.push(i);
+        }
+    }
+
+    winningBoxCombos.forEach(function(combo) {
+        for (var i = 0; i < i.length; i++) {
+            // if (markedBoxes[i] === combo) {
+            //     $('#setup').text('We have a WINNER!');
+            //     $('#setup').css('visibility', 'visible');
+            // }
+        }
+    });
 }
 
