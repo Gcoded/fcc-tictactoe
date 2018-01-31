@@ -2,11 +2,13 @@
 var playerMarker = '';
 var cpuMarker = '';
 var gameStarted = false;
+var gameOver = false;
 var playerTurn = true;
 var cpuTurn = false;
-var boxSelected = '';
 var playerMarkCSS = '';
 var cpuMarkCSS = '';
+var playerBoxes = [];
+var cpuBoxes = [];
 
 
 $("#startBtn").click(function(event) {
@@ -44,22 +46,30 @@ function runSetup() {
 
 $(".box").click(function(event) {
     if (gameStarted) {
-        if (playerTurn) {
+        var boxSelected = '';
+
+        if (playerTurn && !gameOver) {
             boxSelected = event.target.id;
+            playerBoxes.push(parseInt(boxSelected.slice(-1)));
             if ($('#'+boxSelected).text() === '') {
                 $('#'+boxSelected).addClass(playerMarkCSS);
                 $('#'+boxSelected).text(playerMarker);
-                checkForWinner();
+                if (playerBoxes.length > 2) {
+                    checkForWinner(playerBoxes, playerMarker);
+                }
                 playerTurn = !playerTurn;
                 cpuTurn = !cpuTurn;
             }
         }
-        if (cpuTurn) {
+        if (cpuTurn && !gameOver) {
             var cpuMoveTimer = setTimeout(function() {
                 boxSelected = cpuMove();
+                cpuBoxes.push(parseInt(boxSelected.slice(-1)));
                 $('#'+boxSelected).addClass(cpuMarkCSS);
                 $('#'+boxSelected).text(cpuMarker);
-                checkForWinner();
+                if (cpuBoxes.length > 2) {
+                    checkForWinner(cpuBoxes, cpuMarker);
+                }
                 cpuTurn = !cpuTurn;
                 playerTurn = !playerTurn;
             }, 1000);
@@ -78,24 +88,29 @@ function cpuMove() {
     return availableBoxes[0];
 }
 
-function checkForWinner() {
+function checkForWinner(markedBoxes, mark) {
+    markedBoxes.sort();
     var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
         [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
-
-    var markedBoxes = [];
-    for (var i = 0; i < 9; i++) {
-        if ($('#box'+ i).text() !== '') {
-            markedBoxes.push(i);
-        }
-    }
-
     winningBoxCombos.forEach(function(combo) {
-        for (var i = 0; i < i.length; i++) {
-            // if (markedBoxes[i] === combo) {
-            //     $('#setup').text('We have a WINNER!');
-            //     $('#setup').css('visibility', 'visible');
-            // }
+        if (markedBoxes.indexOf(combo[0]) > -1) {
+            if (markedBoxes.indexOf(combo[1]) > -1) {
+                if (markedBoxes.indexOf(combo[2]) > -1) {
+                    endGame(mark);
+                }
+            }
         }
     });
 }
+
+function endGame(mark) {
+    gameOver = true;
+    $('#setup').text('Game Over PLAYER '+mark+' WINS!');
+    $('#setup').css('visibility', 'visible');
+    playerBoxes = [];
+    cpuBoxes = [];
+}
+
+
+
 
