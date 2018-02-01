@@ -21,8 +21,8 @@ function runSetup() {
     gameStarted = true;
     var xButton = $('<button class="marker" id="xButton"></button>').text('X');
     var oButton = $('<button class="marker" id="oButton"></button>').text('O');
-    $('#setup').append(xButton, oButton);
-    $('#setup').css('visibility', 'visible');
+    $('#setup').text('Choose your mark: ').append(xButton, oButton)
+        .css('visibility', 'visible');
 
     $(".marker").click(function(event) {
         if (event.target.id === "xButton") {
@@ -52,8 +52,7 @@ $(".box").click(function(event) {
             boxSelected = event.target.id;
             playerBoxes.push(parseInt(boxSelected.slice(-1)));
             if ($('#'+boxSelected).text() === '') {
-                $('#'+boxSelected).addClass(playerMarkCSS);
-                $('#'+boxSelected).text(playerMarker);
+                $('#'+boxSelected).addClass(playerMarkCSS).text(playerMarker);
                 if (playerBoxes.length > 2) {
                     checkForWinner(playerBoxes, playerMarker);
                 }
@@ -65,8 +64,7 @@ $(".box").click(function(event) {
             var cpuMoveTimer = setTimeout(function() {
                 boxSelected = cpuMove();
                 cpuBoxes.push(parseInt(boxSelected.slice(-1)));
-                $('#'+boxSelected).addClass(cpuMarkCSS);
-                $('#'+boxSelected).text(cpuMarker);
+                $('#'+boxSelected).addClass(cpuMarkCSS).text(cpuMarker);
                 if (cpuBoxes.length > 2) {
                     checkForWinner(cpuBoxes, cpuMarker);
                 }
@@ -105,8 +103,14 @@ function checkForWinner(markedBoxes, mark) {
 
 function endGame(mark) {
     gameOver = true;
-    $('#setup').text('Game Over PLAYER '+mark+' WINS!');
-    $('#setup').css('visibility', 'visible');
+    if (mark === playerMarker) {
+        $('#setup').text('Congratulations YOU WIN!')
+            .css('visibility', 'visible');
+    }
+    else {
+        $('#setup').text('Sorry you lose, the Computer wins')
+            .css('visibility', 'visible');
+    }
     playerBoxes = [];
     cpuBoxes = [];
 }
