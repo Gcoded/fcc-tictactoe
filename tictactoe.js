@@ -94,6 +94,9 @@ function checkForWinner(markedBoxes, mark) {
         if (markedBoxes.indexOf(combo[0]) > -1) {
             if (markedBoxes.indexOf(combo[1]) > -1) {
                 if (markedBoxes.indexOf(combo[2]) > -1) {
+                    combo.forEach(function(num) {
+                        $('#box'+num).css('background-color', '#ffff66');
+                    });
                     endGame(mark);
                 }
             }
@@ -108,7 +111,7 @@ function endGame(mark) {
             .css('visibility', 'visible');
     }
     else {
-        $('#setup').text('Sorry you lose, the Computer wins')
+        $('#setup').text('Sorry you lose, Computer wins')
             .css('visibility', 'visible');
     }
     playerBoxes = [];
