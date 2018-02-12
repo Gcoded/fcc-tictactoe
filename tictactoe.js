@@ -11,48 +11,44 @@ var playerBoxes = [];
 var cpuBoxes = [];
 
 
-$("#startBtn").click(function(event) {
-    if (!gameStarted){
-        runSetup();
+$('#startBtn').click(function() {
+    if (!gameStarted) {
+        gameStarted = true;
+        var xButton = $('<button class="marker" id="xButton"></button>').text('X');
+        var oButton = $('<button class="marker" id="oButton"></button>').text('O');
+        $('#setup').text('Choose your mark: ').append(xButton, oButton)
+            .css('visibility', 'visible');
+
+        $(".marker").click(function(event) {
+            if (event.target.id === 'xButton') {
+                playerMarker = 'X';
+                playerMarkCSS = 'xMarker';
+                cpuMarker = 'O';
+                cpuMarkCSS = 'oMarker';
+            }
+            if (event.target.id === 'oButton') {
+                playerMarker = 'O';
+                playerMarkCSS = 'oMarker';
+                cpuMarker = 'X';
+                cpuMarkCSS = 'xMarker';
+            }
+            $('#setup').text('You have selected '+playerMarker+', lets begin!');
+            var timer = setTimeout(function() {
+                $('#setup').css('visibility', 'hidden');
+            }, 3000);
+        });
     }
 });
 
-function runSetup() {
-    gameStarted = true;
-    var xButton = $('<button class="marker" id="xButton"></button>').text('X');
-    var oButton = $('<button class="marker" id="oButton"></button>').text('O');
-    $('#setup').text('Choose your mark: ').append(xButton, oButton)
-        .css('visibility', 'visible');
-
-    $(".marker").click(function(event) {
-        if (event.target.id === "xButton") {
-            playerMarker = 'X';
-            playerMarkCSS = 'xMarker';
-            cpuMarker = 'O';
-            cpuMarkCSS = 'oMarker';
-        }
-        if (event.target.id === 'oButton') {
-            playerMarker = 'O';
-            playerMarkCSS = 'oMarker';
-            cpuMarker = 'X';
-            cpuMarkCSS = 'xMarker';
-        }
-        $('#setup').text('You have selected '+playerMarker+', lets begin!');
-        var timer = setTimeout(function() {
-            $('#setup').css('visibility', 'hidden');
-        }, 3000);
-    });
-}
-
-$(".box").click(function(event) {
+$('.box').click(function(event) {
     if (gameStarted) {
         var boxSelected = '';
 
         if (playerTurn && !gameOver) {
             boxSelected = event.target.id;
-            playerBoxes.push(parseInt(boxSelected.slice(-1)));
             if ($('#'+boxSelected).text() === '') {
                 $('#'+boxSelected).addClass(playerMarkCSS).text(playerMarker);
+                playerBoxes.push(parseInt(boxSelected.slice(-1)));
                 if (playerBoxes.length > 2) {
                     checkForWinner(playerBoxes, playerMarker);
                 }
@@ -63,8 +59,8 @@ $(".box").click(function(event) {
         if (cpuTurn && !gameOver) {
             var cpuMoveTimer = setTimeout(function() {
                 boxSelected = cpuMove();
-                cpuBoxes.push(parseInt(boxSelected.slice(-1)));
                 $('#'+boxSelected).addClass(cpuMarkCSS).text(cpuMarker);
+                cpuBoxes.push(parseInt(boxSelected.slice(-1)));
                 if (cpuBoxes.length > 2) {
                     checkForWinner(cpuBoxes, cpuMarker);
                 }
@@ -91,15 +87,13 @@ function checkForWinner(markedBoxes, mark) {
     var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
         [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
     winningBoxCombos.forEach(function(combo) {
-        if (markedBoxes.indexOf(combo[0]) > -1) {
-            if (markedBoxes.indexOf(combo[1]) > -1) {
-                if (markedBoxes.indexOf(combo[2]) > -1) {
-                    combo.forEach(function(num) {
-                        $('#box'+num).css('background-color', '#ffff66');
-                    });
-                    endGame(mark);
-                }
-            }
+        if (markedBoxes.indexOf(combo[0]) > -1 &&
+            markedBoxes.indexOf(combo[1]) > -1 &&
+            markedBoxes.indexOf(combo[2]) > -1) {
+            combo.forEach(function(num) {
+                $('#box'+num).css('background-color', '#ffff66');
+            });
+            endGame(mark);
         }
     });
 }
@@ -107,11 +101,11 @@ function checkForWinner(markedBoxes, mark) {
 function endGame(mark) {
     gameOver = true;
     if (mark === playerMarker) {
-        $('#setup').text('Congratulations YOU WIN!')
+        $('#setup').text('YOU WIN, Nice Job!')
             .css('visibility', 'visible');
     }
     else {
-        $('#setup').text('Sorry you lose, Computer wins')
+        $('#setup').text('Computer Wins, Sorry Try Again')
             .css('visibility', 'visible');
     }
     playerBoxes = [];
