@@ -52,10 +52,14 @@ $('.box').click(function(event) {
                 if (playerBoxes.length > 2) {
                     checkForWinner(playerBoxes, playerMarker);
                 }
+                if (playerBoxes.length === 5) {
+                    endGame();
+                }
                 playerTurn = !playerTurn;
                 cpuTurn = !cpuTurn;
             }
         }
+
         if (cpuTurn && !gameOver) {
             var cpuMoveTimer = setTimeout(function() {
                 boxSelected = cpuMove();
@@ -63,6 +67,9 @@ $('.box').click(function(event) {
                 cpuBoxes.push(parseInt(boxSelected.slice(-1)));
                 if (cpuBoxes.length > 2) {
                     checkForWinner(cpuBoxes, cpuMarker);
+                }
+                if (cpuBoxes.length === 5) {
+                    endGame();
                 }
                 cpuTurn = !cpuTurn;
                 playerTurn = !playerTurn;
@@ -104,8 +111,12 @@ function endGame(mark) {
         $('#setup').text('YOU WIN, Nice Job!')
             .css('visibility', 'visible');
     }
-    else {
+    if (mark === cpuMarker) {
         $('#setup').text('Computer Wins, Sorry Try Again')
+            .css('visibility', 'visible');
+    }
+    else {
+        $('#setup').text('Its a Draw, Nobody Wins')
             .css('visibility', 'visible');
     }
     playerBoxes = [];
