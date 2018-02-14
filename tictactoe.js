@@ -1,10 +1,8 @@
 
 var playerMarker = '';
 var cpuMarker = '';
-var gameStarted = false;
-var gameOver = false;
+var gameActive = false;
 var playerTurn = true;
-var cpuTurn = false;
 var playerMarkCSS = '';
 var cpuMarkCSS = '';
 var playerBoxes = [];
@@ -12,8 +10,15 @@ var cpuBoxes = [];
 
 
 $('#startBtn').click(function() {
-    if (!gameStarted) {
-        gameStarted = true;
+    if (!gameActive) {
+        playerBoxes = [];
+        cpuBoxes = [];
+        playerTurn = true;
+        for (var i = 1; i < 10; i++) {
+            $('#box'+i).text('').css('background-color', 'transparent')
+                .removeClass('xMarker oMarker');
+        }
+
         var xButton = $('<button class="marker" id="xButton"></button>').text('X');
         var oButton = $('<button class="marker" id="oButton"></button>').text('O');
         $('#setup').text('Choose your mark: ').append(xButton, oButton)
@@ -37,44 +42,41 @@ $('#startBtn').click(function() {
                 $('#setup').css('visibility', 'hidden');
             }, 3000);
         });
+        gameActive = true;
     }
 });
 
 $('.box').click(function(event) {
-    if (gameStarted) {
-        var boxSelected = '';
+    var boxSelected = '';
 
-        if (playerTurn && !gameOver) {
-            boxSelected = event.target.id;
-            if ($('#'+boxSelected).text() === '') {
-                $('#'+boxSelected).addClass(playerMarkCSS).text(playerMarker);
-                playerBoxes.push(parseInt(boxSelected.slice(-1)));
-                if (playerBoxes.length > 2) {
-                    checkForWinner(playerBoxes, playerMarker);
-                }
-                if (playerBoxes.length === 5) {
-                    endGame();
-                }
-                playerTurn = !playerTurn;
-                cpuTurn = !cpuTurn;
+    if (playerTurn && gameActive) {
+        boxSelected = event.target.id;
+        if ($('#'+boxSelected).text() === '') {
+            $('#'+boxSelected).addClass(playerMarkCSS).text(playerMarker);
+            playerBoxes.push(parseInt(boxSelected.slice(-1)));
+            if (playerBoxes.length > 2) {
+                checkForWinner(playerBoxes, playerMarker);
             }
+            if (playerBoxes.length === 5) {
+                endGame();
+            }
+            playerTurn = !playerTurn;
         }
+    }
 
-        if (cpuTurn && !gameOver) {
-            var cpuMoveTimer = setTimeout(function() {
-                boxSelected = cpuMove();
-                $('#'+boxSelected).addClass(cpuMarkCSS).text(cpuMarker);
-                cpuBoxes.push(parseInt(boxSelected.slice(-1)));
-                if (cpuBoxes.length > 2) {
-                    checkForWinner(cpuBoxes, cpuMarker);
-                }
-                if (cpuBoxes.length === 5) {
-                    endGame();
-                }
-                cpuTurn = !cpuTurn;
-                playerTurn = !playerTurn;
-            }, 1000);
-        }
+    if (!playerTurn && gameActive) {
+        var cpuMoveTimer = setTimeout(function() {
+            boxSelected = cpuMove();
+            $('#'+boxSelected).addClass(cpuMarkCSS).text(cpuMarker);
+            cpuBoxes.push(parseInt(boxSelected.slice(-1)));
+            if (cpuBoxes.length > 2) {
+                checkForWinner(cpuBoxes, cpuMarker);
+            }
+            if (cpuBoxes.length === 5) {
+                endGame();
+            }
+            playerTurn = !playerTurn;
+        }, 1000);
     }
 });
 
@@ -82,7 +84,7 @@ function cpuMove() {
     var totalBoxes = 9;
     var availableBoxes = [];
     for (var i = 1; i < totalBoxes+1; i++) {
-        if ($('#box'+ i).text() === '') {
+        if ($('#box'+i).text() === '') {
             availableBoxes.push('box'+i);
         }
     }
@@ -106,12 +108,12 @@ function checkForWinner(markedBoxes, mark) {
 }
 
 function endGame(mark) {
-    gameOver = true;
+    gameActive = false;
     if (mark === playerMarker) {
         $('#setup').text('YOU WIN, Nice Job!')
             .css('visibility', 'visible');
     }
-    if (mark === cpuMarker) {
+    else if (mark === cpuMarker) {
         $('#setup').text('Computer Wins, Sorry Try Again')
             .css('visibility', 'visible');
     }
@@ -119,8 +121,6 @@ function endGame(mark) {
         $('#setup').text('Its a Draw, Nobody Wins')
             .css('visibility', 'visible');
     }
-    playerBoxes = [];
-    cpuBoxes = [];
 }
 
 
