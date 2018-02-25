@@ -58,9 +58,6 @@ $('.box').click(function(event) {
             if (playerBoxes.length > 2) {
                 checkForWinner(playerBoxes, playerMarker);
             }
-            if (playerBoxes.length === 5) {
-                endGame();
-            }
             playerTurn = !playerTurn;
         }
     }
@@ -72,9 +69,6 @@ $('.box').click(function(event) {
             cpuBoxes.push(parseInt(boxSelected.slice(-1)));
             if (cpuBoxes.length > 2) {
                 checkForWinner(cpuBoxes, cpuMarker);
-            }
-            if (cpuBoxes.length === 5) {
-                endGame();
             }
             playerTurn = !playerTurn;
         }, 1000);
@@ -106,6 +100,9 @@ function checkForWinner(markedBoxes, mark) {
             endGame(mark);
         }
     });
+    if (markedBoxes.length === 5 && gameActive) {
+            endGame();
+        }
 }
 
 function endGame(mark) {
