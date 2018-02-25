@@ -16,7 +16,7 @@ $('#startBtn').click(function() {
         playerTurn = true;
         for (var i = 1; i < 10; i++) {
             $('#box'+i).text('').css('background-color', 'transparent')
-                .removeClass('xMarker oMarker');
+                .removeClass();
         }
 
         var xButton = $('<button class="marker" id="xButton"></button>').text('X');
@@ -41,8 +41,9 @@ $('#startBtn').click(function() {
             var timer = setTimeout(function() {
                 $('#setup').css('visibility', 'hidden');
             }, 3000);
+
+            gameActive = true;
         });
-        gameActive = true;
     }
 });
 
