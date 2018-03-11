@@ -7,6 +7,8 @@ var playerMarkCSS = '';
 var cpuMarkCSS = '';
 var playerBoxes = [];
 var cpuBoxes = [];
+var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
+        [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
 
 
 $('#startBtn').click(function() {
@@ -78,18 +80,42 @@ $('.box').click(function(event) {
 function cpuMove() {
     var totalBoxes = 9;
     var availableBoxes = [];
+    var blockWin = '';
+    var bestMove = '';
+
     for (var i = 1; i < totalBoxes+1; i++) {
         if ($('#box'+i).text() === '') {
-            availableBoxes.push('box'+i);
+            availableBoxes.push(i);
         }
     }
-    return availableBoxes[0];
+
+    for (var i = 0; i < winningBoxCombos.length; i++) {
+        var combo = winningBoxCombos[i];
+        //check if player has 2 out of 3 in a winning combo
+        if ((playerBoxes.indexOf(combo[0]) > -1 && playerBoxes.indexOf(combo[1]) > -1
+                && availableBoxes.indexOf(combo[2]) > -1) ||
+            (playerBoxes.indexOf(combo[1]) > -1 && playerBoxes.indexOf(combo[2]) > -1
+                && availableBoxes.indexOf(combo[0]) > -1) ||
+            (playerBoxes.indexOf(combo[0]) > -1 && playerBoxes.indexOf(combo[2]) > -1
+                && availableBoxes.indexOf(combo[1]) > -1)) {
+
+            combo.forEach(function(num) {
+                if (playerBoxes.indexOf(num) === -1) {
+                    blockWin = 'box'+num;
+                }
+            });
+            break;
+        }
+    }
+
+    if (blockWin)
+        return  blockWin;
+    else
+        return 'box'+availableBoxes[0];
 }
 
 function checkForWinner(markedBoxes, mark) {
     markedBoxes.sort();
-    var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
-        [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
     winningBoxCombos.forEach(function(combo) {
         if (markedBoxes.indexOf(combo[0]) > -1 &&
             markedBoxes.indexOf(combo[1]) > -1 &&
