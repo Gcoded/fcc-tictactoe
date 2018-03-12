@@ -78,40 +78,57 @@ $('.box').click(function(event) {
 });
 
 function cpuMove() {
-    var totalBoxes = 9;
-    var availableBoxes = [];
+    var availableBoxes = findOpenSpaces();
+    var getWin = '';
     var blockWin = '';
     var bestMove = '';
 
-    for (var i = 1; i < totalBoxes+1; i++) {
-        if ($('#box'+i).text() === '') {
-            availableBoxes.push(i);
-        }
-    }
+    getWin = oneMoreToWin(cpuBoxes);
+    blockWin = oneMoreToWin(playerBoxes);
 
+    if (getWin) {
+        return  getWin;
+    }
+    else if (blockWin) {
+        return blockWin;
+    }
+    else {
+        return 'box'+availableBoxes[0];
+    }
+}
+
+function oneMoreToWin(markedBoxes) {
+    var availableBoxes = findOpenSpaces();
+    var boxToWin = '';
     for (var i = 0; i < winningBoxCombos.length; i++) {
         var combo = winningBoxCombos[i];
         //check if player has 2 out of 3 in a winning combo
-        if ((playerBoxes.indexOf(combo[0]) > -1 && playerBoxes.indexOf(combo[1]) > -1
+        if ((markedBoxes.indexOf(combo[0]) > -1 && markedBoxes.indexOf(combo[1]) > -1
                 && availableBoxes.indexOf(combo[2]) > -1) ||
-            (playerBoxes.indexOf(combo[1]) > -1 && playerBoxes.indexOf(combo[2]) > -1
+            (markedBoxes.indexOf(combo[1]) > -1 && markedBoxes.indexOf(combo[2]) > -1
                 && availableBoxes.indexOf(combo[0]) > -1) ||
-            (playerBoxes.indexOf(combo[0]) > -1 && playerBoxes.indexOf(combo[2]) > -1
+            (markedBoxes.indexOf(combo[0]) > -1 && markedBoxes.indexOf(combo[2]) > -1
                 && availableBoxes.indexOf(combo[1]) > -1)) {
 
             combo.forEach(function(num) {
-                if (playerBoxes.indexOf(num) === -1) {
-                    blockWin = 'box'+num;
+                if (markedBoxes.indexOf(num) === -1) {
+                    boxToWin = 'box'+num;
                 }
             });
             break;
         }
     }
+    return boxToWin;
+}
 
-    if (blockWin)
-        return  blockWin;
-    else
-        return 'box'+availableBoxes[0];
+function findOpenSpaces() {
+    var openSpaces = [];
+    for (var i = 1; i <= 9; i++) {
+        if ($('#box'+i).text() === '') {
+            openSpaces.push(i);
+        }
+    }
+    return openSpaces;
 }
 
 function checkForWinner(markedBoxes, mark) {
@@ -146,6 +163,7 @@ function endGame(mark) {
             .css('visibility', 'visible');
     }
 }
+
 
 
 
