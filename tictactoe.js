@@ -79,6 +79,12 @@ $('.box').click(function(event) {
 
 function cpuMove() {
     var availableBoxes = findOpenSpaces();
+    var numOfAvailableBoxes = availableBoxes.length;
+    var cornerAndMiddleBoxes = availableBoxes.filter(function(box) {
+            return (box % 2 !== 0);
+        });
+    var randomBox = Math.floor(Math.random() * numOfAvailableBoxes);
+    var randomOddBox = Math.floor(Math.random() * cornerAndMiddleBoxes.length);
     var getWin = '';
     var blockWin = '';
     var bestMove = '';
@@ -86,15 +92,26 @@ function cpuMove() {
     getWin = oneMoreToWin(cpuBoxes);
     blockWin = oneMoreToWin(playerBoxes);
 
-    if (getWin) {
-        return  getWin;
+    if (numOfAvailableBoxes === 9) {
+        bestMove = 'box'+cornerAndMiddleBoxes[randomOddBox];
+    }
+    else if (numOfAvailableBoxes === 8) {
+        if (availableBoxes.indexOf(5) > -1)
+            bestMove = 'box5';
+        else
+            bestMove = 'box'+cornerAndMiddleBoxes[randomOddBox];
+    }
+    else if (getWin) {
+        bestMove = getWin;
     }
     else if (blockWin) {
-        return blockWin;
+        bestMove = blockWin;
     }
     else {
-        return 'box'+availableBoxes[0];
+        bestMove = 'box'+availableBoxes[randomBox];
     }
+
+    return bestMove;
 }
 
 function oneMoreToWin(markedBoxes) {
