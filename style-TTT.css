@@ -8,6 +8,10 @@
 body {
     font-family: 'Play', sans-serif;
     text-align: center;
+    color: #1a1a1a;
+    background-color: #E8E8E8;
+    --x-color: #437C90;
+    --o-color: #E1854F;
 }
 
 h1 {
@@ -17,63 +21,96 @@ h1 {
 
 button {
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
 }
 
-#setup {
-    visibility: hidden;
-    margin: 20px;
-    font-size: 18px;
+#startbtn {
+    color: #E8E8E8;
+    background-color: #414770;
+    border: 2px solid #02182B;
+    border-radius: 100%;
+    width: 150px;
+    height: 150px;
+    transition: 1s;
+}
+
+#startbtn:hover, #startbtn:focus {
+    background-color: #E8E8E8;
+    color: #414770;
+}
+
+#message {
+    height: 20px;
+    margin: 10px;
+    font-size: 20px;
 }
 
 #xButton {
-    color: red;
+    color: var(--x-color);
     border: none;
-    background-color: none;
+    background-color: transparent;
 }
 
 .xMarker {
-    color: red;
+    color: var(--x-color);
 }
 
 #oButton {
-    color: green;
+    color: var(--o-color);
     border: none;
-    background-color: none;
+    background-color: transparent;
 }
 
 .oMarker {
-    color: green;
+    color: var(--o-color);
 }
 
 .wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    padding: 6% 35%;
+    padding: 2% 36%;
 }
 
 section {
     grid-column: span 1;
     grid-row: span 1;
-    max-width: 150px;
     height: 100px;
     padding: 20px;
     text-align: center;
     font-size: 45px;
+    opacity: 0;
+    --brdr-color: #1a1a1a;
+    --brdr-width: 8px;
+}
+
+.fade-in {
+    animation: fadeIn 2s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-400px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #box1, #box2, #box4, #box5 {
-    border-right: 3px solid #333;
-    border-bottom: 3px solid #333;
+    border-right: var(--brdr-width) solid var(--brdr-color);
+    border-bottom: var(--brdr-width) solid var(--brdr-color);
 }
 
 #box3, #box6 {
-    border-bottom: 3px solid #333;
+    border-bottom: var(--brdr-width) solid var(--brdr-color);
 }
 
 #box7, #box8 {
-    border-right: 3px solid #333;
+    border-right: var(--brdr-width) solid var(--brdr-color);
 }
 
 a:link, a:visited {
@@ -82,7 +119,6 @@ a:link, a:visited {
 }
 
 footer {
-    position: relative;
     font-size: 18px;
     font-style: italic;
 }

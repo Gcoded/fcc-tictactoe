@@ -18,13 +18,12 @@ $('#startBtn').click(function() {
         playerTurn = true;
         for (var i = 1; i < 10; i++) {
             $('#box'+i).text('').css('background-color', 'transparent')
-                .removeClass();
+                .removeClass('xMarker oMarker');
         }
 
         var xButton = $('<button class="marker" id="xButton"></button>').text('X');
         var oButton = $('<button class="marker" id="oButton"></button>').text('O');
-        $('#setup').text('Choose your mark: ').append(xButton, oButton)
-            .css('visibility', 'visible');
+        $('#message').text('Choose your mark: ').append(xButton, oButton);
 
         $(".marker").click(function(event) {
             if (event.target.id === 'xButton') {
@@ -39,10 +38,12 @@ $('#startBtn').click(function() {
                 cpuMarker = 'X';
                 cpuMarkCSS = 'xMarker';
             }
-            $('#setup').text('You have selected '+playerMarker+', lets begin!');
+            $('#message').text('You selected '+playerMarker+', lets begin!');
             var timer = setTimeout(function() {
-                $('#setup').css('visibility', 'hidden');
+                $('#message').css('visibility', 'hidden');
             }, 3000);
+
+            $('section').addClass('fade-in');
 
             gameActive = true;
         });
@@ -80,11 +81,11 @@ $('.box').click(function(event) {
 function cpuMove() {
     var availableBoxes = findOpenSpaces();
     var numOfAvailableBoxes = availableBoxes.length;
-    var cornerAndMiddleBoxes = availableBoxes.filter(function(box) {
+    var oddBoxes = availableBoxes.filter(function(box) {
             return (box % 2 !== 0);
         });
     var randomBox = Math.floor(Math.random() * numOfAvailableBoxes);
-    var randomOddBox = Math.floor(Math.random() * cornerAndMiddleBoxes.length);
+    var randomOddBox = Math.floor(Math.random() * oddBoxes.length);
     var getWin = '';
     var blockWin = '';
     var bestMove = '';
@@ -93,13 +94,13 @@ function cpuMove() {
     blockWin = oneMoreToWin(playerBoxes);
 
     if (numOfAvailableBoxes === 9) {
-        bestMove = 'box'+cornerAndMiddleBoxes[randomOddBox];
+        bestMove = 'box'+oddBoxes[randomOddBox];
     }
     else if (numOfAvailableBoxes === 8) {
         if (availableBoxes.indexOf(5) > -1)
             bestMove = 'box5';
         else
-            bestMove = 'box'+cornerAndMiddleBoxes[randomOddBox];
+            bestMove = 'box'+oddBoxes[randomOddBox];
     }
     else if (getWin) {
         bestMove = getWin;
@@ -155,7 +156,7 @@ function checkForWinner(markedBoxes, mark) {
             markedBoxes.indexOf(combo[1]) > -1 &&
             markedBoxes.indexOf(combo[2]) > -1) {
             combo.forEach(function(num) {
-                $('#box'+num).css('background-color', '#ffff66');
+                $('#box'+num).css('background-color', '#ffffb3');
             });
             endGame(mark);
         }
@@ -168,15 +169,15 @@ function checkForWinner(markedBoxes, mark) {
 function endGame(mark) {
     gameActive = false;
     if (mark === playerMarker) {
-        $('#setup').text('YOU WIN, Nice Job!')
+        $('#message').text('YOU WIN, Nice Job!')
             .css('visibility', 'visible');
     }
     else if (mark === cpuMarker) {
-        $('#setup').text('Computer Wins, Sorry Try Again')
+        $('#message').text('Computer Wins, Sorry Try Again')
             .css('visibility', 'visible');
     }
     else {
-        $('#setup').text('Its a Draw, Nobody Wins')
+        $('#message').text('Its a Draw, Nobody Wins')
             .css('visibility', 'visible');
     }
 }
