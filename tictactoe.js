@@ -12,42 +12,40 @@ var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
 
 
 $('#startBtn').click(function() {
-    if (!gameActive) {
-        playerBoxes = [];
-        cpuBoxes = [];
-        playerTurn = true;
-        for (var i = 1; i < 10; i++) {
-            $('#box'+i).text('').css('background-color', 'transparent')
-                .removeClass('xMarker oMarker');
-        }
-
-        var xButton = $('<button class="marker" id="xButton"></button>').text('X');
-        var oButton = $('<button class="marker" id="oButton"></button>').text('O');
-        $('#message').text('Choose your mark: ').append(xButton, oButton);
-
-        $(".marker").click(function(event) {
-            if (event.target.id === 'xButton') {
-                playerMarker = 'X';
-                playerMarkCSS = 'xMarker';
-                cpuMarker = 'O';
-                cpuMarkCSS = 'oMarker';
-            }
-            if (event.target.id === 'oButton') {
-                playerMarker = 'O';
-                playerMarkCSS = 'oMarker';
-                cpuMarker = 'X';
-                cpuMarkCSS = 'xMarker';
-            }
-            $('#message').text('You selected '+playerMarker+', lets begin!');
-            var timer = setTimeout(function() {
-                $('#message').css('visibility', 'hidden');
-            }, 3000);
-
-            $('section').addClass('fade-in');
-
-            gameActive = true;
-        });
+    playerBoxes = [];
+    cpuBoxes = [];
+    playerTurn = true;
+    for (var i = 1; i < 10; i++) {
+        $('#box'+i).text('').css('background-color', 'transparent')
+            .removeClass('xMarker oMarker');
     }
+
+    var xButton = $('<button class="marker" id="xButton"></button>').text('X');
+    var oButton = $('<button class="marker" id="oButton"></button>').text('O');
+    $('#message').text('Choose your mark: ').append(xButton, oButton);
+
+    $(".marker").click(function(event) {
+        if (event.target.id === 'xButton') {
+            playerMarker = 'X';
+            playerMarkCSS = 'xMarker';
+            cpuMarker = 'O';
+            cpuMarkCSS = 'oMarker';
+        }
+        if (event.target.id === 'oButton') {
+            playerMarker = 'O';
+            playerMarkCSS = 'oMarker';
+            cpuMarker = 'X';
+            cpuMarkCSS = 'xMarker';
+        }
+        $('#message').text('You selected '+playerMarker+', lets begin!');
+        var timer = setTimeout(function() {
+            $('#message').css('visibility', 'hidden');
+        }, 3000);
+
+        $('section').addClass('fade-in');
+
+        gameActive = true;
+    });
 });
 
 $('.box').click(function(event) {
