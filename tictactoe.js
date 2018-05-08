@@ -9,9 +9,12 @@ var playerBoxes = [];
 var cpuBoxes = [];
 var winningBoxCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7],
         [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
+var resetGameTimer;
 
 
-$('#startBtn').click(function() {
+$('#startBtn').click(startGame);
+
+function startGame() {
     playerBoxes = [];
     cpuBoxes = [];
     playerTurn = true;
@@ -19,6 +22,7 @@ $('#startBtn').click(function() {
         $('#box'+i).text('').css('background-color', 'transparent')
             .removeClass('xMarker oMarker');
     }
+    clearTimeout(resetGameTimer);
 
     var xButton = $('<button class="marker" id="xButton"></button>').text('X');
     var oButton = $('<button class="marker" id="oButton"></button>').text('O');
@@ -46,7 +50,7 @@ $('#startBtn').click(function() {
 
         gameActive = true;
     });
-});
+}
 
 $('.box').click(function(event) {
     var boxSelected = '';
@@ -178,6 +182,8 @@ function endGame(mark) {
         $('#message').text('Its a Draw, Nobody Wins')
             .css('visibility', 'visible');
     }
+
+    resetGameTimer = setTimeout(startGame, 7000);
 }
 
 
